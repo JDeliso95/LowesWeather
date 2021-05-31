@@ -28,16 +28,15 @@ class WeatherAdapter(
 
     inner class WeatherViewHolder(private val binding: WeatherItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
-
-        fun bind(weather: HourlyWeather, listener: OnItemClickListener) = with(binding) {
+        
+        fun bind(weatherItem: HourlyWeather, listener: OnItemClickListener) = with(binding) {
 
             itemView.setOnClickListener{
-                listener.onItemClicked(weather)
+                listener.onItemClicked(weatherItem)
             }
 
-            binding.weatherDescription.text = weather.weather[0].description
-            binding.temp.text = weather.main.temp.toInt().toString()
+            binding.weatherDescription.text = weatherItem.weather[0].description
+            binding.temp.text = weatherItem.main.temp.toInt().toString()
         }
     }
 

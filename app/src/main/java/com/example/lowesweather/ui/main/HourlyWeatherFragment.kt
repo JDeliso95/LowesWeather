@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lowesweather.R
 import com.example.lowesweather.data.models.HourlyWeather
+import com.example.lowesweather.data.models.WeatherResponseDTO
 import com.example.lowesweather.databinding.HourlyWeatherBinding
 import com.example.lowesweather.ui.main.adapters.OnItemClickListener
 import com.example.lowesweather.ui.main.adapters.WeatherAdapter
@@ -18,6 +18,10 @@ import com.example.lowesweather.ui.main.adapters.WeatherAdapter
 class HourlyWeatherFragment : Fragment(), OnItemClickListener {
 
     private lateinit var binding: HourlyWeatherBinding
+
+    private val weatherObserver = Observer<WeatherResponseDTO> {
+        binding.weatherRv.adapter = WeatherAdapter(it.list, this@HourlyWeatherFragment)
+    }
 
     companion object {
         fun newInstance() = HourlyWeatherFragment()
@@ -33,6 +37,8 @@ class HourlyWeatherFragment : Fragment(), OnItemClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = HourlyWeatherBinding.inflate(inflater, container, false)
+
+        binding.weatherRv.adapter = WeatherAdapter(listOf(), this@HourlyWeatherFragment)
         return binding.root
     }
 
@@ -40,13 +46,7 @@ class HourlyWeatherFragment : Fragment(), OnItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-
-            viewModel.currentWeather.observe(viewLifecycleOwner, Observer{
-                binding.weatherRv.apply {
-                    layoutManager = LinearLayoutManager(context)
-                    adapter = WeatherAdapter(it.list, this@HourlyWeatherFragment)
-                }
-        })
+        viewModel.currentWeather.observe(viewLifecycleOwner, weatherObserver)
     }
 
 }
