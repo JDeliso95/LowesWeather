@@ -11,16 +11,16 @@ object RetrofitService {
     private const val BASE_URL = "http://api.openweathermap.org/"
 
     private fun providesOkHttpClient(): OkHttpClient {
-        val httpLoggingInterceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT)
+        val httpLoggingInterceptor =
+            HttpLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT)
+                .setLevel(HttpLoggingInterceptor.Level.BODY)
 
         val clientBuilder =
-            OkHttpClient.Builder().connectTimeout(TIMEOUT, TimeUnit.SECONDS).readTimeout(
-                TIMEOUT,
-                TimeUnit.SECONDS
-            ).writeTimeout(TIMEOUT, TimeUnit.SECONDS)
+            OkHttpClient.Builder().connectTimeout(TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
+                .addInterceptor(httpLoggingInterceptor)
 
-        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        clientBuilder.addInterceptor(httpLoggingInterceptor)
 
         return clientBuilder.build()
     }
@@ -28,8 +28,7 @@ object RetrofitService {
     fun providesRetrofitService(): Retrofit =
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
             .client(providesOkHttpClient())
-            .build();
-
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
 }

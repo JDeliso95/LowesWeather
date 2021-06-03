@@ -17,7 +17,8 @@
     <fragment
         android:id="@+id/hourlyWeatherFragment"
         android:name="com.example.lowesweather.ui.main.HourlyWeatherFragment"
-        android:label="HourlyWeatherFragment" >
+        android:label="HourlyWeatherFragment"
+        tools:layout="@layout/hourly_weather">
         <action
             android:id="@+id/action_hourlyWeatherFragment_to_singleWeatherFragment"
             app:destination="@id/singleWeatherFragment" />
@@ -25,5 +26,6 @@
     <fragment
         android:id="@+id/singleWeatherFragment"
         android:name="com.example.lowesweather.ui.main.SingleWeatherFragment"
-        android:label="SingleWeatherFragment" />
+        android:label="SingleWeatherFragment"
+        tools:layout="@layout/single_weather"/>
 </navigation>

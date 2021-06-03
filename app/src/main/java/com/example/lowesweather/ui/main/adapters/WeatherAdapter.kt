@@ -3,12 +3,14 @@ package com.example.lowesweather.ui.main.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.lowesweather.R
 import com.example.lowesweather.data.models.HourlyWeather
 import com.example.lowesweather.databinding.WeatherItemBinding
 
 class WeatherAdapter(
-    private val weather: List<HourlyWeather>,
-    val listener: OnItemClickListener): RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder>(){
+    private val weatherList: List<HourlyWeather>,
+    private val listener: (weather: HourlyWeather) -> Unit
+) : RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         WeatherViewHolder(
@@ -17,32 +19,28 @@ class WeatherAdapter(
                 parent,
                 false
             )
-        )
+        ).apply {
+            itemView.setOnClickListener { listener.invoke(weatherList[adapterPosition]) }
+        }
 
-    override fun getItemCount(): Int = weather.size
+    override fun getItemCount(): Int = weatherList.size
 
-    override fun onBindViewHolder(holder: WeatherViewHolder, position: Int): Unit = with(holder) {
-        val weatherItem = weather[position]
-        holder.bind(weatherItem, listener)
+    override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
+        holder.bind(weatherList[position])
     }
 
     inner class WeatherViewHolder(private val binding: WeatherItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        
-        fun bind(weatherItem: HourlyWeather, listener: OnItemClickListener) = with(binding) {
-
-            itemView.setOnClickListener{
-                listener.onItemClicked(weatherItem)
-            }
-
-            binding.weatherDescription.text = weatherItem.weather[0].description
-            binding.temp.text = weatherItem.main.temp.toInt().toString()
+        fun bind(weatherItem: HourlyWeather) = with(binding) {
+            weatherDescription.text = weatherItem.weather[0].main
+            temp.text = String.format(
+                binding.root.context.getString(
+                    R.string.weather_item_temp,
+                    weatherItem.main?.temp?.toInt().toString()
+                )
+            )
         }
     }
 
 
-}
-
-interface OnItemClickListener{
-    fun onItemClicked(hour: HourlyWeather)
 }

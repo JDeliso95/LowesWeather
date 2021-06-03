@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">LowesWeather</string>
+    <string name="city_lookup_hint">City Name</string>
+    <string name="city_lookup_button">Lookup</string>
+
+    <string name="city_lookup_empty_query">Query cannot be empty.</string>
+    <string name="weather_search_error">Error getting weather results.</string>
+
+    <string name="weather_item_temp">Temp: %s</string>
+    <string name="feels_like_temp">Feels like: %s</string>
 </resources>
